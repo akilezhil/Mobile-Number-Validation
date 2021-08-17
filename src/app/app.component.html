@@ -1,0 +1,71 @@
+<div class="container centerdiv">
+  <div class="card">
+    <div class="card-header">Mobile Number Tracker</div>
+    <div class="card-body">
+      <form [formGroup]="mobileForm" (ngSubmit)="onSubmit()">
+
+          <div class="form-group">
+            <label for="phonenumber">Phone Number</label>
+            <input type="text" class="form-control" placeholder="Mobile Number"  formControlName = "mobileNumber" id="mobile" [ngClass]="{ 'is-invalid': submitted && f.mobileNumber.errors }" >
+            <div *ngIf="submitted && f.mobileNumber.errors" class="invalid-feedback">
+              <div *ngIf="f.mobileNumber.errors.required">MobileNumber is required</div>
+              <div *ngIf="f.mobileNumber.errors.minlength">Enter valid length of mobile number</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="Country">Country</label>
+            <select class="form-control" id="country" formControlName = "country" [ngClass]="{ 'is-invalid': submitted && f.country.errors }">
+              <option>Select Country</option>
+              <option *ngFor ="let country of counrtryList" value = "{{country.code}}" (onChange)="setCountry($event)"  > {{country.name}} </option>
+            </select>
+            <div *ngIf="submitted && f.country.errors" class="invalid-feedback">
+              <div *ngIf="f.country.errors.required">country is required</div>
+            </div>
+          </div>
+          
+          <div class="text-right">
+            <button type="reset" class="btn btn-secondary customBtn" (click) = "onReset()">Reset</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div> 
+
+    <!-- <div class="spinner-border text-dark" role="status" >
+      <span class="sr-only">Loading...</span>
+    </div> -->
+    <div class="overlay" *ngIf = "loader;else showResult">
+      <div class="d-flex justify-content-center">  
+        <div class="spinner-grow text-primary" role="status" style="width: 3rem; height: 3rem; z-index: 20;">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+    <ng-template #showResult>
+    <div class="card-footer" *ngIf ="showTable">
+      <div class="table-responsive-sm" *ngIf = "info.valid;else showError">
+        <table class="table table-borderless">
+          <tr>
+              <td> Phone Number : </td>
+              <td> <span class="badge badge-primary">{{info.international_format}}</span> </td>
+          </tr>
+          <tr>
+            <td>Country Name:</td>
+            <td> <span class="badge badge-secondary">{{info.country_name}}</span> </td>
+          </tr>
+         <tr>
+            <td>Location:</td>
+            <td> <span class="badge badge-success">{{info.location}}</span> </td>
+          </tr>
+          <tr>
+            <td>Provide Name:</td>
+            <td> <span class="badge badge-danger">{{info.carrier}}</span> </td>
+          </tr> 
+        </table>
+      </div>
+      <ng-template #showError>
+        <div class = "text-center text-danger">Invalid phone number</div>
+      </ng-template>
+    </div>
+  </ng-template>
+  </div>
+</div>
